@@ -52,7 +52,7 @@ int  main()
 	int reuse = 0;
 	struct sockaddr_in cliaddr, servaddr;    
 
-    init_daemon();//初始化为Daemon
+   // init_daemon();//初始化为Daemon
 
     if ((ser_socket = socket(AF_INET,SOCK_STREAM,0))<0)
     {
@@ -110,15 +110,16 @@ int  main()
             }
             buffer[datanum] = '\0';
             printf("%d:say %s\n", htons(cl_addr.sin_port), buffer);
-            // printf("you want to say:");
-            // scanf("%s",renew);
+            printf("you want to say:");
+            scanf("%s",renew);
             if((fp=fopen("tcp_server.log","a")) >=0) 
             { 
                 fprintf(fp, "%d:say %s\n", htons(cl_addr.sin_port), buffer);
                 fclose(fp); 
             }    
-            send(client, "服务端受到消息", strlen("服务端受到消息"), 0);          
-            send(client, buffer, strlen(renew), 0);
+            //send(client, "服务端受到消息", strlen("服务端受到消息"), 0);          	    
+            send(client, renew, strlen(renew), 0);
+            //send(client, buffer, strlen(renew), 0);
             if(strcmp(renew, "quit") == 0)
             {
                 exit(0);//销毁此线程

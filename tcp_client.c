@@ -18,6 +18,7 @@ int main(int argc, const char * argv[]) {
     struct sockaddr_in ser_addr;
     char sendbuf[400];
     char recbuf[400];
+    char ipv4_ddr[10];
     int sennum,recnum;
     int listenfd;
 	int reuse = 0;
@@ -28,10 +29,16 @@ int main(int argc, const char * argv[]) {
         perror("socket");
         return -1;
     }
-    
+    printf("input server ipv4_ddr: (enter d to set defualt host address)\n");
+    scanf("%s",ipv4_ddr);
+    if(ipv4_ddr[0] == 'd')
+    {
+        strcpy(ipv4_ddr,"120.26.211.36");
+    }
+    printf("ipv4_ddr is %s\n", ipv4_ddr);
     ser_addr.sin_family = AF_INET;
     ser_addr.sin_port = htons(5901);
-    ser_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    ser_addr.sin_addr.s_addr = inet_addr(ipv4_ddr);
  	
      listenfd = socket(PF_INET, SOCK_STREAM,0);
 	if (setsockopt(listenfd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse)) < 0)

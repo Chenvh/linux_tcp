@@ -117,14 +117,11 @@ int  main()
                 fprintf(fp, "%d:say %s\n", htons(cl_addr.sin_port), buffer);
                 fclose(fp); 
             }    
-<<<<<<< HEAD
-            //send(client, "服务端受到消息", strlen("服务端受到消息"), 0);          	    
+            send(client, "服务端受到消息", strlen("服务端受到消息"), 0);          	    
             send(client, renew, strlen(renew), 0);
             //send(client, buffer, strlen(renew), 0);
-=======
             //send(client, "服务端受到消息", strlen("服务端受到消息"), 0);          
             send(client, buffer, strlen(buffer), 0);
->>>>>>> 921f517d2b2c500840aaca45d527751d98429f57
             if(strcmp(renew, "quit") == 0)
             {
                 exit(0);//销毁此线程

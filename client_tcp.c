@@ -18,7 +18,7 @@ int main(int argc, const char * argv[]) {
     struct sockaddr_in ser_addr;
     char sendbuf[400];
     char recbuf[400];
-    char ipv4_ddr[10];
+    char ipv4_ddr[20];
     int sennum,recnum;
     int listenfd;
 	int reuse = 0;

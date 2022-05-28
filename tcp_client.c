@@ -29,11 +29,11 @@ int main(int argc, const char * argv[]) {
         perror("socket");
         return -1;
     }
-    printf("input server ipv4_ddr: (enter d to set localhost)\n");
+    printf("input server ipv4_ddr: (enter d to set defualt host address)\n");
     scanf("%s",ipv4_ddr);
     if(ipv4_ddr[0] == 'd')
     {
-        strcpy(ipv4_ddr,"127.0.0.1");
+        strcpy(ipv4_ddr,"120.26.211.36");
     }
     printf("ipv4_ddr is %s\n", ipv4_ddr);
     ser_addr.sin_family = AF_INET;

@@ -1,16 +1,4 @@
-#include <sys/stat.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/param.h> 
-#include <sys/stat.h> 
+#include "tcp.h"
 
 void init_daemon(void) 
 { 

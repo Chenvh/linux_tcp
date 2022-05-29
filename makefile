@@ -1,6 +1,6 @@
 target:
-	gcc tcp_server.c -o tcp_server
-	gcc tcp_client.c -o tcp_client
+	gcc server_tcp.c -o server_tcp
+	gcc client_tcp.c -o client_tcp
 
 clean:
-	rm tcp_server tcp_client
+	rm server_tcp client_tcp

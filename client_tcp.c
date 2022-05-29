@@ -1,16 +1,4 @@
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <netdb.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
- 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include "tcp.h"
  
  
 int main(int argc, const char * argv[]) {
@@ -18,7 +6,7 @@ int main(int argc, const char * argv[]) {
     struct sockaddr_in ser_addr;
     char sendbuf[400];
     char recbuf[400];
-    char ipv4_ddr[10];
+    char ipv4_ddr[20];
     int sennum,recnum;
     int listenfd;
 	int reuse = 0;
@@ -29,7 +17,7 @@ int main(int argc, const char * argv[]) {
         perror("socket");
         return -1;
     }
-    printf("input server ipv4_ddr: (enter d to set localhost)\n");
+    printf("input server ipv4_ddr: (enter d to set defualt host address)\n");
     scanf("%s",ipv4_ddr);
     if(ipv4_ddr[0] == 'd')
     {
@@ -66,9 +54,12 @@ int main(int argc, const char * argv[]) {
         recbuf[recnum] = '\0';
         printf("recv is: %s\n", recbuf);
         if(strcmp(recbuf, "quit") == 0)
-            break;
+        {
+            close(client_socket);
+            exit(0);
+        }
     }
-    close(client_socket);
+
     
     return 0;
 }

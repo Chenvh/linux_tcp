@@ -1,4 +1,3 @@
 tcp_server.log
-tcp_server
-tcp_client
-test.c
+server_tcp
+client_tcp.c

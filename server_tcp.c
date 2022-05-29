@@ -1,16 +1,4 @@
-#include <sys/stat.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/param.h> 
-#include <sys/stat.h> 
+#include "tcp.h"
 
 void init_daemon(void) 
 { 
@@ -52,7 +40,7 @@ int  main()
 	int reuse = 0;
 	struct sockaddr_in cliaddr, servaddr;    
 
-   // init_daemon();//初始化为Daemon
+   init_daemon();//初始化为Daemon
 
     if ((ser_socket = socket(AF_INET,SOCK_STREAM,0))<0)
     {
@@ -94,41 +82,46 @@ int  main()
             continue;
         }
         printf("\n recv client data:\n");
-        printf("IP is %s\n",inet_ntoa(cl_addr.sin_addr));
-        printf("port is %d\n",htons(cl_addr.sin_port));
+        printf("Connect IP is %s\n",inet_ntoa(cl_addr.sin_addr));
+        printf("Connect port is %d\n",htons(cl_addr.sin_port));
         //进行对话,创建线程
         if((pid = fork())==0)
         {
-         close(ser_socket);
-        while(1)
-        {           
-            datanum = recv(client, buffer, 4000, 0);// 收数据
-            if(datanum< 0)
-            {
-                perror("recv");
-                continue;
+            close(ser_socket);
+            while(1)
+            {           
+                datanum = recv(client, buffer, 4000, 0);// 收数据
+                if(datanum< 0)
+                {
+                    perror("recv");
+                    continue;
+                }
+                buffer[datanum] = '\0';
+                printf("%d:say %s\n", htons(cl_addr.sin_port), buffer);
+                // printf("you want to say:");
+                // scanf("%s",renew);
+                if((fp=fopen("tcp_server.log","a")) >=0) 
+                { 
+                    fprintf(fp, "%d:say %s\n", htons(cl_addr.sin_port), buffer);
+                    fclose(fp); 
+                }    
+                //send(client, "服务端受到消息", strlen("服务端受到消息"), 0);          	    
+                // send(client, renew, strlen(renew), 0);
+                //send(client, buffer, strlen(renew), 0);
+                //send(client, "服务端受到消息", strlen("服务端受到消息"), 0);          
+                send(client, buffer, strlen(buffer), 0);
+                printf("continue\n");
+                // if(strcmp(buffer, "quit_server") == 0)
+                // {
+                //     exit(0);//销毁此线程
+                //     break;
+                // }
             }
-            buffer[datanum] = '\0';
-            printf("%d:say %s\n", htons(cl_addr.sin_port), buffer);
-            printf("you want to say:");
-            scanf("%s",renew);
-            if((fp=fopen("tcp_server.log","a")) >=0) 
-            { 
-                fprintf(fp, "%d:say %s\n", htons(cl_addr.sin_port), buffer);
-                fclose(fp); 
-            }    
-            send(client, "服务端受到消息", strlen("服务端受到消息"), 0);          	    
-            send(client, renew, strlen(renew), 0);
-            //send(client, buffer, strlen(renew), 0);
-            //send(client, "服务端受到消息", strlen("服务端受到消息"), 0);          
-            send(client, buffer, strlen(buffer), 0);
-            if(strcmp(renew, "quit") == 0)
-            {
-                exit(0);//销毁此线程
-                break;
-            }
+            close(client);
+            // exit(0);
+            // break;
         }
-        }
+        close(ser_socket);
     }
     
     return 0;

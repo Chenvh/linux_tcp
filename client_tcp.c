@@ -1,16 +1,4 @@
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <netdb.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
- 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include "tcp.h"
  
  
 int main(int argc, const char * argv[]) {
@@ -33,7 +21,7 @@ int main(int argc, const char * argv[]) {
     scanf("%s",ipv4_ddr);
     if(ipv4_ddr[0] == 'd')
     {
-        strcpy(ipv4_ddr,"120.26.211.36");
+        strcpy(ipv4_ddr,"127.0.0.1");
     }
     printf("ipv4_ddr is %s\n", ipv4_ddr);
     ser_addr.sin_family = AF_INET;
@@ -66,9 +54,12 @@ int main(int argc, const char * argv[]) {
         recbuf[recnum] = '\0';
         printf("recv is: %s\n", recbuf);
         if(strcmp(recbuf, "quit") == 0)
-            break;
+        {
+            close(client_socket);
+            exit(0);
+        }
     }
-    close(client_socket);
+
     
     return 0;
 }
